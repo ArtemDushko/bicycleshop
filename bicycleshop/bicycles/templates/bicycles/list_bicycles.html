@@ -1,0 +1,72 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Bicycle List</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<a href="{% url 'bicycles:add_bicycle' %}" class="btn btn-primary">Add Bicycle</a>
+<button id="sell-button" type="button" class="btn btn-primary" disabled>Sell Bicycle</button>
+<button id="edit-button" type="button" class="btn btn-secondary" disabled>Edit</button>
+<button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+
+<form id="bicycle-form" method="POST" action="{% url 'bicycles:delete_bicycle' %}">
+    {% csrf_token %}
+    <input type="hidden" id="delete-input" name="emp-pk">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">
+                    <a href="{% url 'bicycles:sort_bicycles' %}?sort=make&order={% if sort == 'make' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'make' %}text-muted{% endif %}">
+                        Make {% if sort == 'make' and order == 'desc' %}&#x25BC;{% elif sort == 'make' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">Model</th>
+                <th scope="col">
+                    <a href="{% url 'bicycles:sort_bicycles' %}?sort=modelyear&order={% if sort == 'modelyear' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'modelyear' %}text-muted{% endif %}">
+                            Model Year {% if sort == 'modelyear' and order == 'desc' %}&#x25BC;{% elif sort == 'modelyear' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">Type</th>
+                <th scope="col">Color</th>
+                <th scope="col">In Stock</th>
+                <th scope="col">
+                    <a href="{% url 'bicycles:sort_bicycles' %}?sort=price&order={% if sort == 'price' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'price' %}text-muted{% endif %}">
+                        Price {% if sort == 'price' and order == 'desc' %}&#x25BC;{% elif sort == 'price' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for bicycle in bicycles %}
+            <tr>
+                <td><input type="checkbox" name="emp-pk" value="{{ bicycle.pk }}"></td>
+                <td>{{ bicycle.make }}</td>
+                <td>{{ bicycle.model }}</td>
+                <td>{{ bicycle.modelyear }}</td>
+                <td>{{ bicycle.type }}</td>
+                <td>{{ bicycle.color }}</td>
+                <td>{{ bicycle.instock }}</td>
+                <td>{{ bicycle.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% block bicycle_scripts %}
+    {% include 'bicycle_scripts.html' %}
+{% endblock %}
+
+{% endblock %}

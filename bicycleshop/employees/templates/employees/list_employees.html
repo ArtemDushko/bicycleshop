@@ -1,0 +1,69 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Employee List</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<a href="{% url 'employees:add_employee' %}" class="btn btn-primary">Add Employee</a>
+<button id="edit-button" type="button" class="btn btn-secondary" disabled>Edit</button>
+<button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+
+<form id="employee-form" method="POST" action="{% url 'employees:delete_employee' %}">
+    {% csrf_token %}
+    <input type="hidden" id="delete-input" name="emp-pk">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Birthday</th>
+                <th scope="col">SSN</th>
+                <th scope="col">Passport</th>
+                <th scope="col">
+                    <a href="{% url 'employees:sort_employees' %}?sort=phone&order={% if sort == 'phone' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'phone' %}text-muted{% endif %}">
+                        Phone number {% if sort == 'phone' and order == 'desc' %}&#x25BC;{% elif sort == 'phone' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">Role</th>
+                <th scope="col">
+                    <a href="?sort=startdate&order={% if sort == 'startdate' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                    class="{% if sort == 'startdate' %}text-muted{% endif %}">
+                    Start date {% if sort == 'startdate' and order == 'desc' %}&#x25BC;{% elif sort == 'startdate' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">Salary, UAH</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td><input type="checkbox" name="emp-pk" value="{{ employee.pk }}"></td>
+                <td>{{ employee.firstname }} {{ employee.lastname }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.birthday }}</td>
+                <td>{{ employee.ssn }}</td>
+                <td>{{ employee.passport }}</td>
+                <td>{{ employee.phone }}</td>
+                <td>{{ employee.role }}</td>
+                <td>{{ employee.startdate }}</td>
+                <td>{{ employee.salary }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% block employee_scripts %}
+    {% include 'employee_scripts.html' %}
+{% endblock %}
+
+{% endblock %}

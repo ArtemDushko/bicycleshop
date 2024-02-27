@@ -1,0 +1,154 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="container mt-5">
+  <form method="POST" class="form-group">
+    {% csrf_token %}
+    <input type="hidden" name="bicycle" id="id_bicycle" value="{{ bicycle.pk }}">
+    <div class="form-group row mb-2">
+        <label for="id_make" class="col-sm-2 col-form-label">Make:</label>
+        <div class="col-md-6">
+          <input type="text" id="id_make" class="form-control" value="{{ bicycle.make }}" readonly>
+        </div>
+        {{ form.make.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_model" class="col-sm-2 col-form-label">Model:</label>
+        <div class="col-md-6">
+          <input type="text" id="id_model" class="form-control" value="{{ bicycle.model }}" readonly>
+        </div>
+        {{ form.model.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_modelyear" class="col-sm-2 col-form-label">Model Year:</label>
+        <div class="col-md-6">
+          <input type="number" id="id_modelyear" class="form-control" value="{{ bicycle.modelyear }}" readonly>
+        </div>
+        {{ form.modelyear.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_type" class="col-sm-2 col-form-label">Type:</label>
+        <div class="col-md-6">
+            <input type="text" id="id_type" class="form-control" value="{{ bicycle.type }}" readonly>
+        </div>
+        {{ form.type.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_color" class="col-sm-2 col-form-label">Color:</label>
+        <div class="col-md-6">
+            <input type="text" id="id_color" class="form-control" value="{{ bicycle.color }}" readonly>
+        </div>
+        {{ form.color.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_instock" class="col-sm-2 col-form-label">In Stock:</label>
+        <div class="col-md-6">
+          <input type="number" id="id_instock" class="form-control" value="{{ bicycle.instock }}" readonly>
+        </div>
+        {{ form.instock.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_price" class="col-sm-2 col-form-label">Price:</label>
+        <div class="col-md-6">
+          <input type="number" id="id_price" class="form-control" value="{{ bicycle.price }}" readonly>
+        </div>
+        {{ form.price.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_employee" class="col-sm-2 col-form-label">Employee:</label>
+        <div class="col-md-6">
+          <select name="employee" id="id_employee" class="form-control">
+            {% for employee in form.employee.field.queryset %}
+            <option value="{{ employee.pk }}" {% if form.employee.value == employee.pk %}selected{% endif %}>
+                {{ employee.firstname }} {{ employee.lastname }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        {{ form.employee.errors }}
+    </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_buyer" class="col-sm-2 col-form-label">Buyer:</label>
+        <div class="col-md-6">
+          <select name="buyer" id="id_buyer" class="form-control">
+            {% for customer in form.buyer.field.queryset %}
+            <option value="{{ customer.pk }}" {% if form.buyer.value == customer.pk %}selected{% endif %}>
+                {{ customer.firstname }} {{ customer.lastname }}, {{ customer.discount }}%
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        {{ form.buyer.errors }}
+    </div>
+    
+    <div class="form-group row mb-2">
+      <label for="id_itemssold" class="col-sm-2 col-form-label">Items sold:</label>
+      <div class="col-md-6">
+        <input type="number" step="0.01" name="itemssold" required id="id_itemssold" class="form-control">
+      </div>
+      {{ form.itemssold.errors }}
+    </div>
+
+    <div class="form-group row mb-2">
+      <label for="id_subtotal" class="col-sm-2 col-form-label">Sub Total:</label>
+      <div class="col-md-6">
+          <span class="form-control" id="subtotal-display">0</span>
+      </div>
+    </div>
+  
+    <div class="form-group row mb-2">
+        <label for="id_totalcost" class="col-sm-2 col-form-label">Total Cost:</label>
+        <div class="col-md-6">
+            <span class="form-control" id="totalcost-display">0</span>
+        </div>
+    </div>
+
+      <button type="submit" class="btn btn-primary">Sale</button>
+      <a href="{% url 'bicycles:list_bicycles' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+
+<script>
+  let discounts = {
+      {% for customer in form.buyer.field.queryset %}
+          "{{ customer.pk }}": {{ customer.discount }},
+      {% endfor %}
+  };
+
+  var itemssoldInput = document.getElementById('id_itemssold');
+  var buyerInput = document.getElementById('id_buyer');
+
+  var subtotalOutput = document.getElementById('subtotal-display');  
+  var totalcostOutput = document.getElementById('totalcost-display');
+
+  function updateTotals() {
+      var customer_id = buyerInput.value;
+      var discount = discounts[customer_id];
+      var itemssold = itemssoldInput.value;
+      var price = {{ bicycle.price }};
+      var subtotal = itemssold * price;
+      
+      subtotalOutput.innerText = subtotal.toFixed(2);
+
+      var totalcost = subtotal * (1 - discount/100);
+      totalcostOutput.innerText = totalcost.toFixed(2);
+  }
+
+  buyerInput.addEventListener('change', updateTotals);
+  itemssoldInput.addEventListener('input', updateTotals);
+
+  updateTotals();
+</script>

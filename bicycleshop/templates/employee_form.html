@@ -1,0 +1,109 @@
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<div class="container mt-5">
+  <form method="POST" class="form-group">
+    <input type="hidden" name="csrfmiddlewaretoken" value="M68bwSnKdU1xV3wIZ0CAEDfiPKN3yMs8RnX9GyWm29KOe4hqrdTmG84dIrLpsEiE">
+      {% csrf_token %}
+      
+      <div class="form-group row mb-2">
+        <label for="id_firstname" class="col-sm-2 col-form-label">Firstname:</label>
+        <div class="col-md-6">
+          <input type="text" name="firstname" maxlength="10" required id="id_firstname" class="form-control" value="{{ form.firstname.value|default_if_none:'' }}">
+        </div>
+        {{ form.firstname.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_lastname" class="col-sm-2 col-form-label">Lastname:</label>
+        <div class="col-md-6">
+          <input type="text" name="lastname" maxlength="10" required id="id_lastname" class="form-control" value="{{ form.lastname.value|default_if_none:'' }}">
+        </div>
+        {{ form.lastname.errors }}
+       </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_email" class="col-sm-2 col-form-label">Email:</label>
+        <div class="col-md-6">
+          <input type="email" name="email" maxlength="40" required id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+        {{ form.email.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_birthday" class="col-sm-2 col-form-label">Birthday:</label>
+        <div class="col-md-6">
+          <input type="date" name="birthday" required id="id_birthday" class="form-control" value="{{ form.birthday.value|date:'Y-m-d'|default_if_none:'' }}">
+        </div>
+        {{ form.birthday.errors }}
+      </div>
+        
+      <div class="form-group row mb-2">
+        <label for="id_ssn" class="col-sm-2 col-form-label">SSN:</label>
+        <div class="col-md-6">
+          <input type="number" name="ssn" required id="id_ssn" class="form-control" value="{{ form.ssn.value|default_if_none:'' }}">
+        </div>
+        {{ form.ssn.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_passport" class="col-sm-2 col-form-label">Passport:</label>
+        <div class="col-md-6">
+          <input type="text" name="passport" maxlength="50" required id="id_passport" class="form-control" value="{{ form.passport.value|default_if_none:'' }}">
+        </div>
+        {{ form.passport_id.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_homeaddr" class="col-sm-2 col-form-label">Homeaddr:</label>
+        <div class="col-md-6">
+          <input type="text" name="homeaddr" maxlength="40" required id="id_homeaddr" class="form-control" value="{{ form.homeaddr.value|default_if_none:'' }}">
+        </div>
+        {{ form.homeaddr.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_phone" class="col-sm-2 col-form-label">Phone:</label>
+        <div class="col-md-6">
+          <input type="text" name="phone" maxlength="20" required id="id_phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}">
+        </div>
+        {{ form.phone.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_role" class="col-sm-2 col-form-label">Role:</label>
+        <div class="col-md-6">
+          <select name="role" id="id_role" class="form-control">
+            <option value="Sales" {% if form.role.value == "Sales" %}selected{% endif %}>Sales</option>
+            <option value="Service" {% if form.role.value == "Service" %}selected{% endif %}>Service</option>
+          </select>
+        </div>
+        {{ form.role.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_startdate" class="col-sm-2 col-form-label">Startdate:</label>
+        <div class="col-md-6">
+          <input type="date" name="startdate" required id="id_startdate" class="form-control" value="{{ form.startdate.value|date:'Y-m-d'|default_if_none:'' }}">
+        </div>
+        {{ form.startdate.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_salary" class="col-sm-2 col-form-label">Salary:</label>
+        <div class="col-md-6">
+          <input type="number" name="salary" required id="id_salary" class="form-control" value="{{ form.salary.value|default_if_none:'' }}">
+        </div>
+        {{ form.salary.errors }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <a href="{% url 'employees:list_employees' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>

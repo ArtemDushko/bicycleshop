@@ -1,0 +1,28 @@
+<script>
+    $(document).ready(function(){
+        $('input[type="checkbox"]').on('change', function() {
+            var numChecked = $('input[type="checkbox"]:checked').length;
+            $('#delete-button').prop('disabled', numChecked === 0);
+            $('#edit-button').prop('disabled', numChecked !== 1);
+            $('#sell-button').prop('disabled', numChecked !== 1); 
+        });
+      
+        $("#edit-button").on('click', function() {
+            var selectedBicycleId = $('input[type="checkbox"]:checked').val();
+            var url = "{% url 'bicycles:edit_bicycle' 0 %}".replace('0', selectedBicycleId);
+            console.log(`Redirecting to ${url}`);  
+            window.location.href = url;
+        });
+
+        $("#sell-button").on('click', function() {
+            console.log('clicked.');
+            var selectedBicycleId = $('input[type="checkbox"]:checked').val();
+            var url = "{% url 'bicycles:sale_bicycle' 0 %}".replace('0', selectedBicycleId);
+            window.location.href = url;
+        });
+
+        $("#delete-button").on('click', function() {
+            $("#bicycle-form").submit();
+        });
+    });
+</script>

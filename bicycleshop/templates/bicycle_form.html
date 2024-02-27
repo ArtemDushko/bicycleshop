@@ -1,0 +1,87 @@
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<div class="container mt-5">
+  <form method="POST" class="form-group">
+    <input type="hidden" name="csrfmiddlewaretoken" value="M68bwSnKdU1xV3wIZ0CAEDfiPKN3yMs8RnX9GyWmxxdde4hqrdTmG84dIrLpsEiE">
+      {% csrf_token %}
+      
+      <div class="form-group row mb-2">
+        <label for="id_make" class="col-sm-2 col-form-label">Make:</label>
+        <div class="col-md-6">
+          <select name="make" id="id_make" class="form-control">
+            {% for value, display in form.make.field.choices %}
+            <option value="{{ value }}" {% if form.make.value == value %}selected{% endif %}>{{ display }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {{ form.make.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_model" class="col-sm-2 col-form-label">Model:</label>
+        <div class="col-md-6">
+          <input type="text" name="model" maxlength="20" required id="id_model" class="form-control" value="{{ form.model.value|default_if_none:'' }}">
+        </div>
+        {{ form.model.errors }}
+      </div>
+    
+      <div class="form-group row mb-2">
+        <label for="id_modelyear" class="col-sm-2 col-form-label">Model Year:</label>
+        <div class="col-md-6">
+          <input type="number" name="modelyear" required id="id_modelyear" class="form-control" value="{{ form.modelyear.value|default_if_none:'' }}">
+        </div>
+        {{ form.modelyear.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_type" class="col-sm-2 col-form-label">Type:</label>
+        <div class="col-md-6">
+          <select name="type" id="id_type" class="form-control">
+            {% for value, display in form.type.field.choices %}
+            <option value="{{ value }}" {% if form.type.value == value %}selected{% endif %}>{{ display }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {{ form.type.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_color" class="col-sm-2 col-form-label">Color:</label>
+        <div class="col-md-6">
+          <select name="color" id="id_color" class="form-control">
+            {% for value, display in form.color.field.choices %}
+            <option value="{{ value }}" {% if form.color.value == value %}selected{% endif %}>{{ display }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {{ form.color.errors }}
+      </div>
+
+        
+      <div class="form-group row mb-2">
+        <label for="id_instock" class="col-sm-2 col-form-label">In Stock:</label>
+        <div class="col-md-6">
+          <input type="number" name="instock" required id="id_instock" class="form-control" value="{{ form.instock.value|default_if_none:'' }}">
+        </div>
+        {{ form.instock.errors }}
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="id_price" class="col-sm-2 col-form-label">Price:</label>
+        <div class="col-md-6">
+          <input type="number" step="0.01" name="price" required id="id_price" class="form-control" value="{{ form.price.value|default_if_none:'' }}">
+        </div>
+        {{ form.price.errors }}
+      </div>
+    
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <a href="{% url 'bicycles:list_bicycles' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>

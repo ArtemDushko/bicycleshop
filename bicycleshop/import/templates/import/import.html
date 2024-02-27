@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<h2>Import</h2>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="importFile">Import File</label>
+        <input type="file" class="form-control-file" id="importFile" name="importfile">
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+</form>
+{% endblock %}
+

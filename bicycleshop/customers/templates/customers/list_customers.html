@@ -1,0 +1,57 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Customer List</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<a href="{% url 'customers:add_customer' %}" class="btn btn-primary">Add Customer</a>
+<button id="edit-button" type="button" class="btn btn-secondary" disabled>Edit</button>
+<button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+
+<form id="customer-form" method="POST" action="{% url 'customers:delete_customer' %}">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">
+                    <a href="{% url 'customers:sort_customers' %}?sort=phone&order={% if sort == 'phone' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'phone' %}text-muted{% endif %}">
+                        Phone number {% if sort == 'phone' and order == 'desc' %}&#x25BC;{% elif sort == 'phone' and order == 'asc' %}&#x25B2;{% endif %}    
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{% url 'customers:sort_customers' %}?sort=discount&order={% if sort == 'discount' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'discount' %}text-muted{% endif %}">
+                        Discount, % {% if sort == 'discount' and order == 'desc' %}&#x25BC;{% elif sort == 'discount' and order == 'asc' %}&#x25B2;{% endif %}    
+                    </a>
+                </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td><input type="checkbox" name="emp-pk" value="{{ customer.pk }}"></td>
+                <td>{{ customer.firstname }} {{ customer.lastname }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.discount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% block customer_scripts %}
+    {% include 'customer_scripts.html' %}
+{% endblock %}
+
+{% endblock %}

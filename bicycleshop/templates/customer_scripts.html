@@ -1,0 +1,20 @@
+<script>
+    $(document).ready(function(){
+        $('input[type="checkbox"]').on('change', function() {
+            var numChecked = $('input[type="checkbox"]:checked').length;
+            $('#delete-button').prop('disabled', numChecked === 0);
+            $('#edit-button').prop('disabled', numChecked !== 1);
+        });
+      
+        $("#edit-button").on('click', function() {
+            var selectedCustomerId = $('input[type="checkbox"]:checked').val();
+            var url = "{% url 'customers:edit_customer' 0 %}".replace('0', selectedCustomerId);
+            console.log(`Redirecting to ${url}`);  
+            window.location.href = url;
+        });
+
+        $("#delete-button").on('click', function() {
+            $("#customer-form").submit();
+        });
+    });
+</script>

@@ -1,0 +1,38 @@
+[
+    {
+        "make": "Giant",
+        "model": "Rider",
+        "modelyear": "2020",
+        "type": "Road",
+        "color": "White",
+        "instock": 4,
+        "price": 300
+    },
+    {
+        "make": "Specialized",
+        "model": "Docomo",
+        "modelyear": "2022",
+        "type": "BMX",
+        "color": "Green",
+        "instock": 1,
+        "price": 99.99
+    },
+    {
+        "make": "Fuji",
+        "model": "Drama",
+        "modelyear": "2017",
+        "type": "Tandem",
+        "color": "Black",
+        "instock": 3,
+        "price": 200
+    },
+    {
+        "make": "Fuji",
+        "model": "Otakawa",
+        "modelyear": "2023",
+        "type": "Cross",
+        "color": "Red",
+        "instock": 19,
+        "price": 75
+    }
+]

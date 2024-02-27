@@ -1,0 +1,97 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Sales List</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+
+<form id="sales-form" method="POST" action="{% url 'sales:delete_sale' %}">
+    {% csrf_token %}
+    <input type="hidden" id="delete-input" name="id">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=bicycle&order={% if sort == 'bicycle' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'bicycle' %}text-muted{% endif %}">
+                        Bicycle {% if sort == 'bicycle' and order == 'desc' %}&#x25BC;{% elif sort == 'bicycle' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=buyer&order={% if sort == 'buyer' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'buyer' %}text-muted{% endif %}">
+                        Buyer {% if sort == 'buyer' and order == 'desc' %}&#x25BC;{% elif sort == 'buyer' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=employee&order={% if sort == 'employee' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'employee' %}text-muted{% endif %}">
+                        Employee {% if sort == 'employee' and order == 'desc' %}&#x25BC;{% elif sort == 'employee' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=itemssold&order={% if sort == 'itemssold' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'itemssold' %}text-muted{% endif %}">
+                        Items Sold {% if sort == 'itemssold' and order == 'desc' %}&#x25BC;{% elif sort == 'itemssold' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=sale_date&order={% if sort == 'sale_date' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'totalcost' %}text-muted{% endif %}">
+                        Sale Date {% if sort == 'sale_date' and order == 'desc' %}&#x25BC;{% elif sort == 'sale_date' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    Warranty Ends
+                </th>
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=subtotal&order={% if sort == 'subtotal' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'totalcost' %}text-muted{% endif %}">
+                        Subtotal {% if sort == 'subtotal' and order == 'desc' %}&#x25BC;{% elif sort == 'subtotal' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>            
+                <th scope="col">
+                    <a href="{% url 'sales:sort_sales' %}?sort=totalcost&order={% if sort == 'totalcost' and order == 'asc' %}desc{% else %}asc{% endif %}" 
+                        class="{% if sort == 'totalcost' %}text-muted{% endif %}">
+                        Total Cost {% if sort == 'totalcost' and order == 'desc' %}&#x25BC;{% elif sort == 'totalcost' and order == 'asc' %}&#x25B2;{% endif %}
+                    </a>
+                </th>
+                <th scope="col">
+                    Total Cost
+                </th>           
+            </tr>          
+        </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td><input type="checkbox" name="id" value="{{ sale.id }}"></td>
+                <td>{{ sale.bicycle.make }} {{ sale.bicycle.model }}</td>
+                <td>{{ sale.buyer.firstname }} {{ sale.buyer.lastname }}</td>
+                <td>{{ sale.employee.firstname }} {{ sale.employee.lastname }}</td>
+                <td>{{ sale.itemssold }}</td>
+                <td>{{ sale.sale_date }}</td>
+                <td>{{ sale.warranty_end }}</td>
+                <td>{{ sale.subtotal }}</td>
+                <td>{{ sale.totalcost }}</td>
+                <td><a href="{% url 'sales:invoice' sale.id %}"><i class="bi bi-file-text">ICON</i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% block bicycle_scripts %}
+    {% include 'sale_scripts.html' %}
+{% endblock %}
+
+{% endblock %}

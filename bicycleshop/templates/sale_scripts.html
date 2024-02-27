@@ -1,0 +1,17 @@
+<script>
+    $(document).ready(function(){
+        $('input[type="checkbox"]').on('change', function() {
+            var numChecked = $('input[type="checkbox"]:checked').length;
+            $('#delete-button').prop('disabled', numChecked === 0);
+        });
+    
+        $("#delete-button").on('click', function() {
+            let selectedSalesIds = [];
+            $('input[type="checkbox"]:checked').each(function() {
+                selectedSalesIds.push($(this).val());
+            });
+            $('#delete-input').val(selectedSalesIds);
+            $("#sales-form").submit();
+        });
+    });
+</script>
