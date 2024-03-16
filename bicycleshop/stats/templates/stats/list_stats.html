@@ -1,0 +1,182 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Statistics</h2>
+
+<div class="container">
+    <form action="{% url 'stats:generate_stats' %}" method="POST" class="row g-3">
+        {% csrf_token %}
+
+        <div class="col-auto">
+            <label for="statistic" class="form-label">Select a statistic:</label>
+            <select name="statistic" id="statistic" class="form-select">
+                <option value="most_popular_models">Most popular models</option>
+                <option value="top_sales_managers">Sales managers who sold most bicycles</option>
+                <option value="inactive_customers">Customers who did not purchase any bicycle</option>
+                <option value="months_with_most_purchases">Months when most bicycles were sold</option>
+                <option value="most_reliable_models">Most reliable bicycles</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <label for="from_year" class="form-label">From:</label>
+            <input type="number" id="from_year" name="from_year" min="2017" class="form-control" required>
+        </div>
+
+        <div class="col-auto">
+            <label for="to_year" class="form-label">To:</label>
+            <input type="number" id="to_year" name="to_year" min="2017" class="form-control" required>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mt-3">Generate</button>
+        </div>
+    </form>
+</div>
+
+{% if most_popular_models %}
+<h3>Most Popular Models</h3>
+<a href="{% url 'stats:export_csv_most_popular_models' %}" class="btn btn-primary">Export as CSV</a>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Make</th>
+        <th scope="col">Model</th>
+        <th scope="col">Model Year</th>
+        <th scope="col">Type</th>
+        <th scope="col">Color</th>
+        <th scope="col">Total items sold</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for model in most_popular_models %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ model.bicycle__make }}</td>
+        <td>{{ model.bicycle__model }}</td>
+        <td>{{ model.bicycle__modelyear }}</td>
+        <td>{{ model.bicycle__type }}</td>
+        <td>{{ model.bicycle__color }}</td>
+        <td><b>{{ model.total_items_sold }}</b></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if top_sales_managers %}
+<h3>Sales managers who sold most bicycles</h3>
+<a href="{% url 'stats:export_csv_top_sales_managers' %}" class="btn btn-primary">Export as CSV</a>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Total items sold</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for model in top_sales_managers %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ model.employee__firstname }}</td>
+        <td>{{ model.employee__lastname }}</td>
+        <td><b>{{ model.total_items_sold }}</b></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if inactive_customers %}
+
+<h3>Customers who did not purchase any bicycle</h3>
+<a href="{% url 'stats:export_csv_inactive_customers' %}" class="btn btn-primary">Export as CSV</a>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for model in inactive_customers %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ model.person_ptr__firstname }}</td>
+        <td>{{ model.person_ptr__lastname }}</td>
+        <td>{{ model.person_ptr__phone }}</td>
+        <td>{{ model.person_ptr__email }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if months_with_most_purchases %}
+
+<h3>Months when most bicycles were sold</h3>
+<a href="{% url 'stats:export_csv_months_with_most_purchases' %}" class="btn btn-primary">Export as CSV</a>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Month</th>
+        <th scope="col">Items sold</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in months_with_most_purchases %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ row.month }}</td>
+        <td>{{ row.total_items_sold }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if most_reliable_models %}
+
+<h3>Most reliable bicycles</h3>
+<a href="{% url 'stats:export_csv_most_reliable_models' %}" class="btn btn-primary">Export as CSV</a>
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Make</th>
+        <th scope="col">Model</th>
+        <th scope="col">Model Year</th>
+        <th scope="col">Type</th>
+        <th scope="col">Color</th>
+        <th scope="col">Service Appearances</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in most_reliable_models %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ row.bicycle__make }}</td>
+            <td>{{ row.bicycle__model }}</td>
+            <td>{{ row.bicycle__modelyear }}</td>
+            <td>{{ row.bicycle__type }}</td>
+            <td>{{ row.bicycle__color }}</td>
+            <td>{{ row.service_count }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

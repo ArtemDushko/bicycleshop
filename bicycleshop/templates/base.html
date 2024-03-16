@@ -13,15 +13,18 @@
         
         <div class="navbar-nav flex-grow-1">
             <a class="navbar-brand" href="/">Bicycleshop</a>
-        {% if request.user.profile.authority == 'manager' or request.user.profile.authority == 'employee' or request.user.profile.authority == 'sales'%}
+        {% if request.user.profile.authority == 'manager' or request.user.profile.authority == 'sales'%}
             <a class="nav-item nav-link {% if request.resolver_match.url_name == 'list_customers' %}active{% endif %}" href="{% url 'customers:list_customers' %}">Customers</a>
             <a class="nav-item nav-link {% if request.resolver_match.url_name == 'bicycles' %}active{% endif %}" href="{% url 'bicycles:list_bicycles' %}">Bicycles</a>
             <a class="nav-item nav-link {% if request.resolver_match.url_name == 'sales' %}active{% endif %}" href="/sales">Sales</a>
-            {% endif %}
+        {% endif %}
+        {% if request.user.profile.authority == 'manager' or request.user.profile.authority == 'sales' or request.user.profile.authority == 'service'%}
+            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'service' %}active{% endif %}" href="/service">Service</a>
+        {% endif %}
         {% if request.user.profile.authority == 'manager' %}
             <a class="nav-item nav-link {% if request.resolver_match.url_name == 'list_employees' %}active{% endif %}" href="{% url 'employees:list_employees' %}">Employees</a>
-            <!-- <a class="nav-item nav-link {% if request.resolver_match.url_name == 'statistics' %}active{% endif %}" href="/statistics">Statistics</a>
-            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}" href="/reports">Reports</a> -->
+            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'stats' %}active{% endif %}" href="/stats">Statistics</a>
+            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}" href="/reports">Reports</a>
             <a class="nav-item nav-link {% if request.resolver_match.url_name == 'import' %}active{% endif %}" href="/import">Import</a>
         {% endif %}
         </div>

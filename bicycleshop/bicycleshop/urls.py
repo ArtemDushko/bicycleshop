@@ -22,11 +22,15 @@ urlpatterns = [
     
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('employees/', include('employees.urls')),
-    path('customers/', include('customers.urls')),
     path('bicycles/', include('bicycles.urls')),
+    path('customers/', include('customers.urls')),
+    path('employees/', include('employees.urls')),
     path('import/', include('import.urls')),
+    path('reports/', include('reports.urls')),
     path('sales/', include('sales.urls')),
+    path('service/', include('service.urls')),
+    path('stats/', include('stats.urls')),
+    path('service/', include('service.urls')),
     path('', include('core.urls')),
     
 ]

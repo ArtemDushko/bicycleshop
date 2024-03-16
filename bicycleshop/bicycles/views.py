@@ -1,11 +1,13 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.core import serializers
+from django.http import JsonResponse
 from django.utils import timezone
 from .forms import BicycleForm
 from .models import Bicycle
 from sales.models import Sale
 from sales.forms import SaleForm
-from employees.models import Employee
 from employees.models import Employee
 from customers.models import Customer
 from datetime import datetime, timedelta
@@ -58,7 +60,6 @@ def delete_bicycle(request):
 def sort_bicycles(request):
     sort = request.GET.get('sort', 'price')
     order = request.GET.get('order', '')
-    print('sorting')
     if order == 'desc':
         sort = '-' + sort
     
@@ -94,3 +95,26 @@ def sale_bicycle(request, pk):
         form = SaleForm()
 
     return render(request, 'bicycles/sale_bicycle.html', {'form': form, 'bicycle': bicycle})
+
+@csrf_exempt
+def search_by_makes(request):
+    query = request.GET.get('query', '')
+    matching_bicycles = Bicycle.objects.filter(make__icontains=query).values_list('bicycle_id', flat=True)
+    
+    return JsonResponse(list(matching_bicycles), safe=False)
+
+def apply_filters(request):
+    price_from = request.GET.get("price_from")
+    price_to = request.GET.get("price_to")
+
+    bicycles = Bicycle.objects.all()
+
+    if price_from:
+        price_from = float(price_from)
+        bicycles = bicycles.filter(price__gte=price_from)
+
+    if price_to:
+        price_to = float(price_to)
+        bicycles = bicycles.filter(price__lte=price_to)
+
+    return render(request, 'bicycles/list_bicycles.html', {'bicycles': bicycles})

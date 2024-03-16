@@ -6,8 +6,8 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     AUTHORITY_TYPE = (
-        ('employee', 'Employee'),
         ('sales', 'Sales'),
+        ('service', 'Service'),
         ('manager', 'Manager'),
     )
     authority = models.CharField(max_length=10, choices=AUTHORITY_TYPE, default='sales')

@@ -1,0 +1,100 @@
+<div class="container mt-5">
+    <form method="POST" class="form-group" action="{% url 'service:save_service' %}">
+      {% csrf_token %}
+
+      {% if form.id.value %}
+      <input type="hidden" name="id" value="{{ form.id.value }}">
+      {% endif %}
+
+      <input type="hidden" name="invoice_id" id="id_invoice_id" value="{{ sale.id }}">
+      <div class="form-group row mb-2">
+          <label for="id_invoice_id" class="col-sm-2 col-form-label">Invoice #:</label>
+          <div class="col-md-6">
+              <input type="text" id="id_invoice_id" class="form-control" value="{{ sale.id }}" readonly>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_bicycle" class="col-sm-2 col-form-label">Bicycle:</label>
+          <div class="col-md-6">
+              <input type="text" id="id_bicycle" class="form-control" value="{{ sale.bicycle.make }} {{ sale.bicycle.model }} {{ sale.bicycle.color }} {{ sale.bicycle.modelyear }}" readonly>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_buyer" class="col-sm-2 col-form-label">Buyer:</label>
+          <div class="col-md-6">
+              <input type="text" id="id_buyer" class="form-control" value="{{ sale.buyer.firstname }} {{ sale.buyer.lastname }}" readonly>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_warranty_end" class="col-sm-2 col-form-label">Warranty Ends:</label>
+          <div class="col-md-6">
+              <input type="text" id="id_warranty_end" class="form-control" value="{{ sale.warranty_end }}" readonly>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_specialist" class="col-sm-2 col-form-label">Specialist:</label>
+          <div class="col-md-6">
+            <select name="specialist" id="id_specialist" class="form-control">
+                {% for employee in employees %}
+                <option value="{{ employee.pk }}" 
+                        {% if employee.pk == form.specialist.value %}selected{% endif %}>
+                    {{ employee.firstname }} {{ employee.lastname }}
+                </option>
+                {% endfor %}
+            </select>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_service_startdate" class="col-sm-2 col-form-label">Service Start Date:</label>
+          <div class="col-md-6">
+            <input type="date" name="service_startdate" id="id_service_startdate" class="form-control" required 
+                value="{{ form.service_startdate.value|date:'Y-m-d' }}">
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_service_enddate" class="col-sm-2 col-form-label">Service End Date:</label>
+          <div class="col-md-6">
+          <input type="date" name="service_enddate" id="id_service_enddate" class="form-control"
+            value="{{ form.service_enddate.value|date:'Y-m-d' }}">
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_status" class="col-sm-2 col-form-label">Service Status:</label>
+          <div class="col-md-6">
+          <select name="status" id="id_status" class="form-control">
+            <option value="New" {% if form.status.value == 'New' %}selected{% endif %}>New</option>
+            <option value="In repair" {% if form.status.value == 'In repair' %}selected{% endif %}>In repair</option>
+            <option value="Suspended" {% if form.status.value == 'Suspended' %}selected{% endif %}>Suspended</option>
+            <option value="Complete" {% if form.status.value == 'Complete' %}selected{% endif %}>Complete</option>
+            <option value="Cancelled" {% if form.status.value == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+          </select>
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_service_cost" class="col-sm-2 col-form-label">Service Cost:</label>
+          <div class="col-md-6">
+          <input type="number" step="0.01" name="service_cost" id="id_service_cost" class="form-control"
+            value="{{ form.service_cost.value }}">
+          </div>
+      </div>
+  
+      <div class="form-group row mb-2">
+          <label for="id_comment" class="col-sm-2 col-form-label">Comment:</label>
+          <div class="col-md-6">
+          <input type="text" name="comment" id="id_comment" class="form-control"
+            value="{{ form.comment.value }}">
+          </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="{% url 'service:list_service' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

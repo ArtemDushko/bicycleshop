@@ -40,12 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'accounts',
-    'core',
-    'employees',
-    'customers',
     'bicycles',
+    'core',
+    'customers',
+    'employees',
     'import',
-    'sales'
+    'reports',
+    'sales',
+    'service',
+    'stats'
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'accounts.middleware.login_middleware'
 ]
 
 ROOT_URLCONF = 'bicycleshop.urls'
@@ -87,9 +89,9 @@ WSGI_APPLICATION = 'bicycleshop.wsgi.application'
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'DBNAME',
-        'USER': 'USERNAME',
-        'PASSWORD': 'DBPASS',
+        'NAME': 'bicycleshop',
+        'USER': 'USER',
+        'PASSWORD': 'PASSWORD',
         'HOST': 'localhost',   
         'PORT': '3306',
     }

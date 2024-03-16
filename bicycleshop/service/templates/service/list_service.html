@@ -1,0 +1,68 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Services</h2>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
+      {{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<form method="get" action="{% url 'service:list_service' %}" class="form-inline">
+    <div class="form-group mb-2">
+        <input name="invoice_id" type="text" class="form-control" placeholder="Invoice #" required>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2 ml-2">Add Record</button>
+</form>
+<button id="edit-button" type="button" class="btn btn-secondary" disabled>Edit</button>
+<button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+
+<form id="service-form" method="POST" action="{% url 'service:delete_service' %}">
+    {% csrf_token %}
+    <input type="hidden" id="delete-input" name="id">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Invoice #</th>
+                <th scope="col">Bicycle</th>
+                <th scope="col">Buyer</th>
+                <th scope="col">Warranty Ends</th>
+                <th scope="col">Specialist</th>
+                <th scope="col">Service Start Date</th>
+                <th scope="col">Service End Date</th>
+                <th scope="col">Service Status</th>
+                <th scope="col">Service Cost</th>
+                <th scope="col">Comment</th>
+            </tr>          
+        </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td><input type="checkbox" name="id" value="{{ service.id }}"></td>
+                <td>{{ service.id }}</td>
+                <td>{{ service.sale.bicycle.make }} {{ service.sale.bicycle.model }} {{ service.sale.bicycle.color }} {{ service.sale.bicycle.modelyear }}</td>
+                <td>{{ service.sale.buyer.firstname }} {{ service.sale.buyer.lastname }}</td>
+                <td>{{ service.sale.warranty_end }}</td>
+                <td>{{ service.specialist.firstname }} {{ service.specialist.lastname }}</td>
+                <td>{{ service.service_startdate }}</td>
+                <td>{{ service.service_enddate }}</td>
+                <td>{{ service.status }}</td>
+                <td>{{ service.service_cost }}</td>
+                <td>{{ service.comment }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% block service_scripts %}
+    {% include 'service_scripts.html' %}
+{% endblock %}
+
+{% endblock %}

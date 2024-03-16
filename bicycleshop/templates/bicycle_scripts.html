@@ -24,5 +24,42 @@
         $("#delete-button").on('click', function() {
             $("#bicycle-form").submit();
         });
+
+        $('#search-input').on('input', function(e) { 
+            var searchText = $(this).val();
+            searchMakes(searchText);
+        });
+
+        $('#open-filters-menu').on('click', function() {
+            $('#filters-menu').toggle();
+        });
+
+        $('#clear-filters').on('click', function() {
+            $.ajax({
+                url: "{% url 'bicycles:list_bicycles' %}",
+                context: document.body,
+                success: function(s,x){
+                    $(this).html(s);
+                }
+            });
+        });
     });
+
+    function searchMakes(searchText) {
+        if (searchText.trim() !== '') {
+        var url = "{% url 'bicycles:search_by_makes' %}";
+            $.get(url, {query: searchText}, function(data) {
+                const matchingIds = data.map(String);
+                $('.table tbody tr').each(function() {
+                    const row = $(this);
+                    const checkBox = row.find('input[type="checkbox"]');
+                    if (matchingIds.includes(checkBox.val())) {
+                        row.css('border', '2px solid red');
+                    } else {
+                        row.css('border', '1px #dee2e6');
+                    }
+                });
+            });
+        }
+    }
 </script>

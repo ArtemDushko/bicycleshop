@@ -1,0 +1,24 @@
+{% extends 'base.html'  %}
+
+{% block main_content %}
+<h2>Reports</h2>
+
+<div class="container">
+    <form action="{% url 'reports:generate_reports' %}" method="POST" class="row g-3">
+        {% csrf_token %}
+
+        <div class="col-auto">
+            <label for="statistic" class="form-label">Select report:</label>
+            <select name="statistic" id="statistic" class="form-select">
+                <option value="sales_report">Sales report</option>
+                <option value="service_report">Service report</option>
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mt-3">Generate</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

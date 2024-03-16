@@ -7,20 +7,20 @@ def list_sales(request):
     sales = Sale.objects.all()
     return render(request, 'sales/list_sales.html', {'sales': sales})
 
-# def add_sale(request):
-#     if request.method == "POST":
-#         form = SaleForm(request.POST)
-#         if form.is_valid():
-#             sale = form.save(commit=False)
-#             discount = sale.customer.discount
-#             sub_total = sale.bicycle.price * sale.number
-#             total_cost = sub_total - (sub_total * discount / 100)
-#             sale.sub_total = sub_total
-#             sale.total_cost = total_cost
-#             sale.save()
-#     else:
-#         form = SaleForm()
-#     return render(request, 'sale/sale_form.html', {'form': form})
+def add_sale(request):
+    if request.method == "POST":
+        form = SaleForm(request.POST)
+        if form.is_valid():
+            sale = form.save(commit=False)
+            discount = sale.customer.discount
+            sub_total = sale.bicycle.price * sale.number
+            total_cost = sub_total - (sub_total * discount / 100)
+            sale.sub_total = sub_total
+            sale.total_cost = total_cost
+            sale.save()
+    else:
+        form = SaleForm()
+    return render(request, 'sale/sale_form.html', {'form': form})
 
 def delete_sale(request):
     if request.method == "POST":

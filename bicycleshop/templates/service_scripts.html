@@ -1,4 +1,4 @@
-<!-- <script>
+<script>
     $(document).ready(function(){
         $('input[type="checkbox"]').on('change', function() {
             var numChecked = $('input[type="checkbox"]:checked').length;
@@ -7,14 +7,15 @@
         });
       
         $("#edit-button").on('click', function() {
-            var selectedEmployeeId = $('input[type="checkbox"]:checked').val();
-            var url = "{% url 'employees:edit_employee' 0 %}".replace('0', selectedEmployeeId);
+            var selectedServiceId = $('input[type="checkbox"]:checked').val();
+            var url = "{% url 'service:edit_service' 0 %}".replace('0', selectedServiceId);
             console.log(`Redirecting to ${url}`);  
             window.location.href = url;
         });
 
         $("#delete-button").on('click', function() {
-            $("#employee-form").submit();
+            $("#service-form").submit();
         });
+
     });
-</script> -->
+</script>

@@ -15,6 +15,21 @@
 <button id="sell-button" type="button" class="btn btn-primary" disabled>Sell Bicycle</button>
 <button id="edit-button" type="button" class="btn btn-secondary" disabled>Edit</button>
 <button id="delete-button" type="button" class="btn btn-danger" disabled>Delete</button>
+<input id="search-input" type="text" placeholder="Search by Make">
+<button id="open-filters-menu" class="btn btn-primary">Apply Filter</button>
+<button id="clear-filters" class="btn btn-secondary">Clear Filter</button>
+
+<form id="filters-menu" style="display: none;" method="GET" action="{% url 'bicycles:apply_filters' %}">
+    <label>
+        Price from: 
+        <input type="number" name="price_from" id="price-from" step="0.01" min="1" />
+    </label>
+    <label>
+        To:
+        <input type="number" name="price_to" id="price-to" step="0.01" min="1" />
+    </label>
+    <button type="submit" id="apply-filter" class="btn btn-primary">OK</button>
+</form>
 
 <form id="bicycle-form" method="POST" action="{% url 'bicycles:delete_bicycle' %}">
     {% csrf_token %}
